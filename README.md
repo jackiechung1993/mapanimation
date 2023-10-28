@@ -1,3 +1,3 @@
 # Map Animation
-## Walk Stop from City Hall to Chinatown
+## Walk Stops from City Hall to Chinatown
 
