@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Add a default marker</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+
+
+<style>
+  body { margin: 0; padding: 0; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+
+.map-overlay {
+  position: absolute;
+  left: 0;
+  padding: 10px;
+}
+ 
+</style>
+</head>
+<body>
+<div id="map"></div>
+
+<div class="map-overlay top">
+  <button style="font-size: 2em" onclick="move()">
+    Show my Walk Stops between City Hall to China Town
+  </button>
+</div>
+ 
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1IjoiamFja2llY2h1bmcxOTkzIiwiYSI6ImNsbzN1MzBtaTF3N2kyaXBlZDhvcTZuMWoifQ.a0ucHeHdYwsLDttV-m0H4w';
+
+  var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-118.243685, 34.052234],
+      zoom: 14
+  });
+ 
+var marker = new mapboxgl.Marker()
+    .setLngLat([-118.243685, 34.052234])
+    .addTo(map);
+
+const walkStops = [
+    [-118.24167161448968, 34.054082465008314],
+    [-118.23986917007896,34.05616245177019],
+    [-118.23703675749206, 34.05900679538725],
+    [-118.2362750107672, 34.061931036629424]
+];
+
+let counter = 0;
+function move(){
+  setTimeout(()=>{
+    if (counter >= walkStops.length) return;
+    marker.setLngLat(walkStops[counter]);
+    counter++;
+    move();
+  },1000); 
+}
+
+</script>
+ 
+</body>
+</html>
