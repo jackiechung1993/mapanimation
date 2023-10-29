@@ -7,25 +7,34 @@
 <script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
 <link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
 
-
 <style>
-  body { margin: 0; padding: 0; }
-  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+  
+  body { 
+    margin: 0; 
+    padding: 0; 
+  }
+  #map { 
+    position: absolute; 
+    top: 0; 
+    bottom: 0; 
+    width: 100%; 
+  }
 
 .map-overlay {
   position: absolute;
   left: 0;
   padding: 10px;
 }
- 
+
 </style>
+
 </head>
 <body>
 <div id="map"></div>
 
 <div class="map-overlay top">
   <button style="font-size: 2em" onclick="move()">
-    Show my Walk Stops between City Hall to China Town
+    Show My Bus Stops between City Hall to China Town
   </button>
 </div>
  
@@ -39,28 +48,41 @@
       zoom: 14
   });
  
-var marker = new mapboxgl.Marker()
-    .setLngLat([-118.243685, 34.052234])
-    .addTo(map);
-
-const walkStops = [
+  const busStops = [
     [-118.24167161448968, 34.054082465008314],
     [-118.23986917007896,34.05616245177019],
     [-118.23703675749206, 34.05900679538725],
     [-118.2362750107672, 34.061931036629424]
 ];
 
+//Speed can be inputted depending on how fast the bus is going -> this can be captured with realtime data sourcing from Busses
+const speed = 15; // km/h
+const distanceBetweenStops = 0.5; // km
+const timeBetweenStops = (distanceBetweenStops / speed) * 60; // minutes
+
+busStops.forEach(function(busStop, i) {
+    var arrivalTime = (i+1) * timeBetweenStops;
+    var popup = new mapboxgl.Popup({ offset: 25 })
+        .setText('Bus Stop ' + (i+1) + '\nEstimated arrival time: ' + arrivalTime.toFixed(2) + ' minutes');
+
+    new mapboxgl.Marker()
+        .setLngLat(busStop)
+        .setPopup(popup)
+        .addTo(map);
+});
+
+var topMarker = new mapboxgl.Marker({color: 'red'})
+    .setLngLat([-118.243685, 34.052234])
+    .addTo(map);
+
 let counter = 0;
 function move(){
   setTimeout(()=>{
-    if (counter >= walkStops.length) return;
-    marker.setLngLat(walkStops[counter]);
+    if (counter >= busStops.length) return;
+    topMarker.setLngLat(busStops[counter]);
     counter++;
     move();
   },1000); 
 }
-
-</script>
- 
 </body>
 </html>
